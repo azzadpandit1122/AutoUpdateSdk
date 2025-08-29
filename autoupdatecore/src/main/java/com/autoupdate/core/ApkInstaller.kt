@@ -1,17 +1,18 @@
-package com.azzadpandit1122.autoupdatecore
+package com.autoupdate.core
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.*
 import android.net.Uri
 import android.os.Environment
-import android.widget.Toast
+import androidx.annotation.RequiresPermission
 import androidx.core.content.FileProvider
 import java.io.File
 
 class ApkInstaller(private val context: Context) {
 
     fun downloadAndInstallApk(apkUrl: String) {
-        NotificationUtils.createNotification(context)
+        DownloadNotificationHelper.createChannel(context)
 
         val fileName = "app-update.apk"
         val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
@@ -22,22 +23,50 @@ class ApkInstaller(private val context: Context) {
             .setTitle("Downloading update")
             .setDescription("App update in progress")
             .setDestinationUri(Uri.fromFile(file))
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadId = dm.enqueue(request)
 
-        context.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(ctxt: Context?, intent: Intent?) {
-                val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-                if (id == downloadId) {
-                    context.unregisterReceiver(this)
-                    NotificationUtils.complete(context)
-                    installApk(file)
+        // Poll download status every second
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        val query = DownloadManager.Query().setFilterById(downloadId)
+
+        val runnable = object : Runnable {
+            @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+            override fun run() {
+                val cursor = dm.query(query)
+                if (cursor != null && cursor.moveToFirst()) {
+                    val bytesDownloaded =
+                        cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+                    val bytesTotal =
+                        cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+
+                    if (bytesTotal > 0) {
+                        val progress = (bytesDownloaded * 100L / bytesTotal).toInt()
+                        DownloadNotificationHelper.showProgress(context, progress)
+                    }
+
+                    val status =
+                        cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS))
+                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                        cursor.close()
+                        DownloadNotificationHelper.showInstallOption(context, file)
+                        installApk(file)
+                        return  // Stop polling
+                    } else if (status == DownloadManager.STATUS_FAILED) {
+                        cursor.close()
+                        // Optionally notify failure
+                        return
+                    }
+                    cursor.close()
                 }
+                handler.postDelayed(this, 1000)
             }
-        }, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        }
+        handler.post(runnable)
     }
+
 
     private fun installApk(file: File) {
         val apkUri = FileProvider.getUriForFile(
@@ -53,4 +82,5 @@ class ApkInstaller(private val context: Context) {
 
         context.startActivity(intent)
     }
+
 }

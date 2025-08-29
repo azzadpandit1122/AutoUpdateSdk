@@ -69,7 +69,7 @@ afterEvaluate {
 
                 groupId = "com.github.azzadpandit1122" // GitHub username
                 artifactId = "autoupdatecore"          // Repo or module name
-                version = "1.0.0"                      // Release/tag version
+                version = "1.1.0"                      // Release/tag version
             }
         }
     }

@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.azzadpandit1122.autoupdatecore.AutoUpdater
-import com.azzadpandit1122.autoupdatecore.UpdateType
+import com.autoupdate.core.AutoUpdater
+import com.autoupdate.core.UpdateType
 import kotlinx.coroutines.delay
 
+/*
 @Composable
 fun SplashScreen(modifier: Modifier) {
     val context = LocalContext.current
@@ -56,6 +57,87 @@ fun SplashScreen(modifier: Modifier) {
         LaunchedEffect(true) {
             delay(2000) // show splash for 2 seconds
             // navigate to main screen (can be replaced with Navigation)
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("OyeMeet", color = Color.White, fontSize = 32.sp)
+    }
+}
+*/
+
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.*
+import androidx.core.content.ContextCompat
+
+@Composable
+fun SplashScreen(modifier: Modifier,api: String="") {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    var permissionGranted by remember { mutableStateOf(false) }
+    var shouldNavigate by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        permissionGranted = permissions[Manifest.permission.READ_EXTERNAL_STORAGE] == true &&
+                (permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: true)
+    }
+
+    // Request permission on first composition
+    LaunchedEffect(Unit) {
+        val readPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val writePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (readPermission != PackageManager.PERMISSION_GRANTED ||
+            writePermission != PackageManager.PERMISSION_GRANTED) {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            )
+        } else {
+            permissionGranted = true
+        }
+    }
+
+    // Proceed only after permission is granted
+    if (permissionGranted) {
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    AutoUpdater(
+                        context = context,
+                        updateType = UpdateType.FORCE,
+                        updateJsonUrl = "https://mocki.io/v1/d97bcc6f-248d-451c-8a0d-8fb4b8c552c4"
+//                        updateJsonUrl = "https://raw.githubusercontent.com/azzadpandit1122/oyemeet/main/release-info.json"
+                    ).checkForUpdates()
+
+                    shouldNavigate = true
+                }
+            }
+
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+
+        if (shouldNavigate) {
+            LaunchedEffect(true) {
+                delay(2000)
+                // navigate to main screen
+            }
         }
     }
 

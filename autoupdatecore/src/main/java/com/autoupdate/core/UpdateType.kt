@@ -1,4 +1,4 @@
-package com.azzadpandit1122.autoupdatecore
+package com.autoupdate.core
 
 enum class UpdateType {
     FLEXIBLE,

@@ -1,5 +1,6 @@
-package com.azzadpandit1122.autoupdatecore
+package com.autoupdate.core
 
+import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -28,7 +29,7 @@ object NotificationUtils {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("Downloading update...")
             .setContentText("$progress%")
-            .setSmallIcon(android.R.drawable.stat_sys_download)
+            .setSmallIcon(R.drawable.stat_sys_download)
             .setProgress(100, progress, false)
             .setOngoing(true)
 
@@ -40,7 +41,7 @@ object NotificationUtils {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("Download complete")
             .setContentText("Tap to install")
-            .setSmallIcon(android.R.drawable.stat_sys_download_done)
+            .setSmallIcon(R.drawable.stat_sys_download_done)
             .setProgress(0, 0, false)
             .setOngoing(false)
 

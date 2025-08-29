@@ -1,11 +1,8 @@
-package com.azzadpandit1122.autoupdatecore
+package com.autoupdate.core
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
-import android.widget.Toast
-import androidx.core.content.pm.PackageInfoCompat
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
