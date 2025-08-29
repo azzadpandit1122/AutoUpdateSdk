@@ -69,11 +69,10 @@ class ApkInstaller(private val context: Context) {
 
 
     private fun installApk(file: File) {
-        val apkUri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            file
-        )
+
+        val apkFile = File(context.getExternalFilesDir("Download"), "myapp.apk")
+        val apkUri = FileProvider.getUriForFile(context, "${context.packageName}.provider", apkFile)
+
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(apkUri, "application/vnd.android.package-archive")
