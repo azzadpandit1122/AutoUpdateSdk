@@ -1,8 +1,9 @@
-name: Update README with Latest Release
+name: Update README on Push to Master
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
 
 jobs:
   update-readme:
@@ -11,8 +12,6 @@ jobs:
       - name: Checkout repo and detect default branch
         id: checkout
         uses: actions/checkout@v3
-        with:
-          ref: refs/heads/master  # Temporarily check out master; we'll overwrite below
 
       - name: Get Default Branch Name
         id: get_branch
@@ -20,26 +19,20 @@ jobs:
           DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f2 | tr -d ' ')
           echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
 
-      - name: Checkout Default Branch
-        run: |
-          git fetch origin ${{ env.DEFAULT_BRANCH }}
-          git checkout ${{ env.DEFAULT_BRANCH }}
-          git pull origin ${{ env.DEFAULT_BRANCH }}
-
-      - name: Set up Git
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
       - name: Get Latest Tag
         id: get_tag
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
+          TAG_NAME=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "LATEST_TAG=$TAG_NAME" >> $GITHUB_ENV
 
       - name: Update README Version
         run: |
           sed -i "s|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:[^']*'|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:${{ env.LATEST_TAG }}'|" README.md
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
       - name: Commit and Push Changes
         run: |
@@ -49,4 +42,3 @@ jobs:
           else
             git commit -m "Update README to version ${{ env.LATEST_TAG }}"
             git push origin ${{ env.DEFAULT_BRANCH }}
-          fi
