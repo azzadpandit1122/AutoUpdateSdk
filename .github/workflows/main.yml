@@ -8,19 +8,28 @@ jobs:
   update-readme:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout repo and detect default branch
+        id: checkout
         uses: actions/checkout@v3
+        with:
+          ref: refs/heads/master  # Temporarily check out master; we'll overwrite below
+
+      - name: Get Default Branch Name
+        id: get_branch
+        run: |
+          DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f2 | tr -d ' ')
+          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
+
+      - name: Checkout Default Branch
+        run: |
+          git fetch origin ${{ env.DEFAULT_BRANCH }}
+          git checkout ${{ env.DEFAULT_BRANCH }}
+          git pull origin ${{ env.DEFAULT_BRANCH }}
 
       - name: Set up Git
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
-      - name: Get Default Branch
-        id: get_branch
-        run: |
-          DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f2 | tr -d ' ')
-          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
 
       - name: Get Latest Tag
         id: get_tag
@@ -35,5 +44,9 @@ jobs:
       - name: Commit and Push Changes
         run: |
           git add README.md
-          git commit -m "Update README to version ${{ env.LATEST_TAG }}"
-          git push origin ${{ env.DEFAULT_BRANCH }}
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update README to version ${{ env.LATEST_TAG }}"
+            git push origin ${{ env.DEFAULT_BRANCH }}
+          fi
