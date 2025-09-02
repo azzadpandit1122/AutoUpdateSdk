@@ -75,9 +75,6 @@ include(":app")
         ).checkForUpdates()
 ```
 
-
-
-
 ---
 
 If you want, I can customize it further based on your project specifics or add more sections like FAQs or troubleshooting. Just tell me!
