@@ -5,6 +5,12 @@
         name="downloaded_apk"
         path="Download/" />
 
+    <paths>
+        <external-path
+            name="external_files"
+            path="Download/" />
+    </paths>
+
     <!-- General fallback locations -->
     <external-cache-path
         name="external_cache"

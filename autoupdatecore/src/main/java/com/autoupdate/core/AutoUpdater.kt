@@ -12,4 +12,5 @@ class AutoUpdater(
         val updateManager = UpdateManager(context, updateType, updateJsonUrl)
         updateManager.checkAndPromptUpdate()
     }
+
 }

@@ -5,6 +5,7 @@ import android.app.DownloadManager
 import android.content.*
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.content.FileProvider
 import java.io.File
@@ -68,9 +69,9 @@ class ApkInstaller(private val context: Context) {
     }
 
 
-    private fun installApk(file: File) {
+    /*private fun installApk(file: File) {
 
-        val apkFile = File(context.getExternalFilesDir("Download"), "myapp.apk")
+        val apkFile = File(context.getExternalFilesDir("Download"), file.name + "" + ".apk")
         val apkUri = FileProvider.getUriForFile(context, "${context.packageName}.provider", apkFile)
 
 
@@ -80,6 +81,28 @@ class ApkInstaller(private val context: Context) {
         }
 
         context.startActivity(intent)
+    }*/
+    private fun installApk(file: File) {
+        val apkFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file.name)
+
+        // Ensure file exists
+        if (!apkFile.exists()) {
+            Log.e("APK_INSTALLER", "APK file does not exist at: ${apkFile.absolutePath}")
+            return
+        }
+
+        val apkUri = FileProvider.getUriForFile(context, "${context.packageName}.provider", apkFile)
+
+        // Log the APK URI
+        Log.d("APK_INSTALLER", "APK URI: $apkUri")
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(apkUri, "application/vnd.android.package-archive")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        context.startActivity(intent)
     }
+
 
 }
