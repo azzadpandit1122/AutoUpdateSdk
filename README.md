@@ -57,7 +57,14 @@ rootProject.name = "FeatureTestApp"
 include(":app")
  
 ```
-
+## How to Use
+```kotlin
+  AutoUpdater(
+            context = context,
+            updateType = UpdateType.FORCE,
+            updateJsonUrl = "https://mocki.io/v1/6f465297-5bea-48a8-bcf7-3f1ab449a7fb"
+        ).checkForUpdates()
+```
 ---
 
 If you want, I can customize it further based on your project specifics or add more sections like FAQs or troubleshooting. Just tell me!
