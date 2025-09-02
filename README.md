@@ -57,6 +57,23 @@ rootProject.name = "FeatureTestApp"
 include(":app")
  
 ```
+## Apk url response
+```json
+{
+  "latestVersion": "1.0.0",
+  "url": "https://example.com/download",
+  "releaseNotes": "Initial release with basic features."
+}
+
+```
+## How to Use
+```kotlin
+  AutoUpdater(
+            context = context,
+            updateType = UpdateType.FORCE,
+            updateJsonUrl = "https://mocki.io/v1/6f465297-5bea-48a8-bcf7-3f1ab449a7fb"
+        ).checkForUpdates()
+```
 
 ---
 
