@@ -16,7 +16,7 @@ Add the following dependency to your app-level `build.gradle` file:
 
 ```gradle
 dependencies {
-    implementation 'com.github.azzadpandit1122:AutoUpdateSdk:0.1'
+    implementation 'com.github.azzadpandit1122:AutoUpdateSdk:1.4.9'
 }
 
 
