@@ -1,16 +1,14 @@
-name: Auto Tag and Build
+name: Update README with Latest Release
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
-  tag-and-trigger:
+  update-readme:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout Repo
         uses: actions/checkout@v3
 
       - name: Set up Git
@@ -18,17 +16,18 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      - name: Get latest tag
+      - name: Get Latest Tag
         id: get_tag
         run: |
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "Latest tag: $latest_tag"
-          version_number=$(echo $latest_tag | sed 's/v//' | awk -F. '{$NF++; print $0}' OFS=.)
-          new_tag="v$version_number"
-          echo "New tag: $new_tag"
-          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "LATEST_TAG=$TAG_NAME" >> $GITHUB_ENV
 
-      - name: Create and push new tag
+      - name: Update README Version
         run: |
-          git tag ${{ steps.get_tag.outputs.new_tag }}
-          git push origin ${{ steps.get_tag.outputs.new_tag }}
+          sed -i "s|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:[^']*'|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:${{ env.LATEST_TAG }}'|" README.md
+
+      - name: Commit and Push Changes
+        run: |
+          git add README.md
+          git commit -m "Update README to version ${{ env.LATEST_TAG }}"
+          git push
