@@ -1,4 +1,4 @@
-name: Update README on Push to Master
+name: Auto-update README with Latest SDK Release
 
 on:
   push:
@@ -9,36 +9,30 @@ jobs:
   update-readme:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo and detect default branch
-        id: checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Get Default Branch Name
-        id: get_branch
+      - name: Get Latest Release Tag
+        id: get_latest_tag
         run: |
-          DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f2 | tr -d ' ')
-          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
+          TAG=$(curl --silent "https://api.github.com/repos/azzadpandit1122/AutoUpdateSdk/releases/latest" \
+                | grep '"tag_name":' \
+                | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "LATEST_TAG=$TAG" >> $GITHUB_ENV
 
-      - name: Get Latest Tag
-        id: get_tag
+      - name: Update README with Latest Version
         run: |
-          TAG_NAME=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "LATEST_TAG=$TAG_NAME" >> $GITHUB_ENV
+          echo "Updating README to $LATEST_TAG"
+          sed -i "s|com.github.azzadpandit1122:AutoUpdateSdk:[^']*|com.github.azzadpandit1122:AutoUpdateSdk:${LATEST_TAG}|" README.md
 
-      - name: Update README Version
-        run: |
-          sed -i "s|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:[^']*'|implementation 'com.github.azzadpandit1122:AutoUpdateSdk:${{ env.LATEST_TAG }}'|" README.md
-
-      - name: Set up Git
+      - name: Commit and Push Change if Any
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
-      - name: Commit and Push Changes
-        run: |
           git add README.md
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No changes to commit."
           else
-            git commit -m "Update README to version ${{ env.LATEST_TAG }}"
-            git push origin ${{ env.DEFAULT_BRANCH }}
+            git commit -m "chore: update SDK version to $LATEST_TAG"
+            git push origin HEAD:${{ github.ref }}
+          fi
