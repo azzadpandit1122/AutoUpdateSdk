@@ -1,6 +1,6 @@
 [![JitPack](https://jitpack.io/v/azzadpandit1122/AutoUpdateSdk.svg)](https://jitpack.io/#azzadpandit1122/AutoUpdateSdk)
 ![Build](https://github.com/azzadpandit1122/AutoUpdateSdk/actions/workflows/gradle.yml/badge.svg)
-![License](https://img.shields.io/github/license/azzadpandit1122/AutoUpdateSdk)
+![License](https://img.shields.io/github/license/azzadpandit1122/AutoUpdateSdk?cacheSeconds=60)
 ![Stars](https://img.shields.io/github/stars/azzadpandit1122/AutoUpdateSdk?style=social)
 ![Forks](https://img.shields.io/github/forks/azzadpandit1122/AutoUpdateSdk?style=social)
 
