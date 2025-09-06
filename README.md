@@ -97,13 +97,4 @@ AutoUpdater(
 ## 📊 Who Uses AutoUpdateSdk?
 
 AutoUpdateSdk is growing fast! 🚀  
-Check out how many developers are already using it:
-
-[![Dependents (via libraries.io)](https://img.shields.io/librariesio/dependents/maven/com.github.azzadpandit1122:AutoUpdateSdk)](https://github.com/azzadpandit1122/AutoUpdateSdk/network/dependents)
-[![JitPack](https://jitpack.io/v/azzadpandit1122/AutoUpdateSdk/month.svg)](https://jitpack.io/#azzadpandit1122/AutoUpdateSdk)
-
-👉 Explore the [Dependents Page](https://github.com/azzadpandit1122/AutoUpdateSdk/network/dependents) to see open-source apps already built on **AutoUpdateSdk**.
-
-## 📊 Who Uses AutoUpdateSdk?
-
-AutoUpdateSdk adoption is growing fast 🚀  
+Check out how many developers are already using it:  
