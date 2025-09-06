@@ -1,3 +1,9 @@
+[![JitPack](https://jitpack.io/v/azzadpandit1122/AutoUpdateSdk.svg)](https://jitpack.io/#azzadpandit1122/AutoUpdateSdk)
+![Build](https://github.com/azzadpandit1122/AutoUpdateSdk/actions/workflows/gradle.yml/badge.svg)
+![License](https://img.shields.io/github/license/azzadpandit1122/AutoUpdateSdk)
+![Stars](https://img.shields.io/github/stars/azzadpandit1122/AutoUpdateSdk?style=social)
+![Forks](https://img.shields.io/github/forks/azzadpandit1122/AutoUpdateSdk?style=social)
+
 # 🚀 AutoUpdateSdk – Android Auto Update Library (Open Source)
 
 **AutoUpdateSdk** is a lightweight, open-source Android library that enables **secure auto-update functionality** for apps **outside the Google Play Store**.  
