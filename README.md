@@ -6,11 +6,8 @@
 
 # 🚀 AutoUpdateSdk – Android Auto Update Library (Open Source)
 
-**AutoUpdateSdk** is a lightweight, open-source Android library that enables **secure auto-update functionality** for apps **outside the Google Play Store**.  
-
-Whether you’re distributing **internal enterprise apps**, **beta builds**, or **self-hosted APKs**, AutoUpdateSdk makes sure users always stay on the **latest version** — without any manual checks.  
-
----
+**AutoUpdateSdk** is a lightweight **Kotlin-based Android auto-update SDK** with **Jetpack Compose UI**.  
+It enables **in-app updates without Google Play Store**, perfect for **APK distribution, enterprise apps, and beta builds**.  
 
 ## 🔥 Why AutoUpdateSdk?
 
