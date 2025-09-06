@@ -1,24 +1,41 @@
-# AutoUpdateSdk Integration
+# 🚀 AutoUpdateSdk – Android Auto Update Library (Open Source)
 
-A simple SDK to enable auto-update functionality in your Android app.
+**AutoUpdateSdk** is a lightweight, open-source Android library that enables **secure auto-update functionality** for apps **outside the Google Play Store**.  
 
----
-
-## Overview
-
-This project integrates the AutoUpdateSdk library, which helps you easily implement in-app updates with minimal setup.
+Whether you’re distributing **internal enterprise apps**, **beta builds**, or **self-hosted APKs**, AutoUpdateSdk makes sure users always stay on the **latest version** — without any manual checks.  
 
 ---
 
-## Installation
+## 🔥 Why AutoUpdateSdk?
 
-Add the following dependency to your app-level `build.gradle` file:
+- ✅ **In-App Update Support** (just like Play Store, but works outside it)  
+- ✅ **Force Update / Optional Update Modes**  
+- ✅ **Lightweight SDK with Jetpack Compose support**  
+- ✅ **Secure JSON-based update config**  
+- ✅ **CI/CD ready** (works with **GitHub Actions**, Jenkins, GitLab CI)  
+- ✅ **Open Source & Free to Use**  
+
+If you’ve ever searched for:  
+- *android app auto update sdk*  
+- *in-app update android open source*  
+- *force update android app example*  
+- *self-hosted android update system*  
+- *ci cd pipeline android apk distribution*  
+- *android auto update github action*  
+- *apk update sdk for enterprise apps*  
+
+👉 This library is the **only GitHub-ready, CI/CD compatible solution** in the market right now.  
+
+---
+
+## 📦 Installation
+
+Add **AutoUpdateSdk** via **JitPack**:
 
 ```gradle
 dependencies {
     implementation 'com.github.azzadpandit1122:AutoUpdateSdk:1.4.9'
 }
-
 
 allprojects {
     repositories {
@@ -27,9 +44,8 @@ allprojects {
         maven { url 'https://jitpack.io' }
     }
 }
-
 ```
-## settings.gradle.kts
+## ⚙️ settings.gradle.kts
 ```gradle
 pluginManagement {
     repositories {
@@ -55,27 +71,33 @@ dependencyResolutionManagement {
 
 rootProject.name = "FeatureTestApp"
 include(":app")
- 
 ```
-## Apk url response
+# 🌐 Update JSON Response
 ```json
 {
   "latestVersion": "1.0.0",
   "url": "https://example.com/download",
   "releaseNotes": "Initial release with basic features."
 }
-
 ```
-## How to Use
+# ⚡ How to Use
 ```kotlin
-  AutoUpdater(
-            context = context,
-            updateType = UpdateType.FORCE,
-            updateJsonUrl = "https://mocki.io/v1/6f465297-5bea-48a8-bcf7-3f1ab449a7fb"
-        ).checkForUpdates()
+AutoUpdater(
+    context = context,
+    updateType = UpdateType.FORCE, // FORCE or OPTIONAL
+    updateJsonUrl = "https://mocki.io/v1/6f465297-5bea-48a8-bcf7-3f1ab449a7fb"
+).checkForUpdates()
 ```
+## 📊 Who Uses AutoUpdateSdk?
 
----
+AutoUpdateSdk is growing fast! 🚀  
+Check out how many developers are already using it:
 
-If you want, I can customize it further based on your project specifics or add more sections like FAQs or troubleshooting. Just tell me!
+[![Dependents (via libraries.io)](https://img.shields.io/librariesio/dependents/maven/com.github.azzadpandit1122:AutoUpdateSdk)](https://github.com/azzadpandit1122/AutoUpdateSdk/network/dependents)
+[![JitPack](https://jitpack.io/v/azzadpandit1122/AutoUpdateSdk/month.svg)](https://jitpack.io/#azzadpandit1122/AutoUpdateSdk)
 
+👉 Explore the [Dependents Page](https://github.com/azzadpandit1122/AutoUpdateSdk/network/dependents) to see open-source apps already built on **AutoUpdateSdk**.
+
+## 📊 Who Uses AutoUpdateSdk?
+
+AutoUpdateSdk adoption is growing fast 🚀  
